@@ -19,7 +19,7 @@ export default function Products() {
       <div className="grid grid-rows-[auto_1fr_auto] min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-geist-sans)] pt-24">
         <header className="text-center">
           <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
-            Our Products
+            Our Product
           </h1>
         </header>
 
