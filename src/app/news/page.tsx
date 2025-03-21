@@ -24,16 +24,36 @@ interface NewsResponse {
   articles: Article[];
 }
 
+interface NewsAPIError {
+  status: string;
+  code: string;
+  message: string;
+}
+
+interface ErrorResponse {
+  error: string;
+  details?: NewsAPIError | string;
+}
+
 export default function News() {
   const [news, setNews] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorDetails, setErrorDetails] = useState<
+    NewsAPIError | string | null
+  >(null);
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
         const response = await fetch("/api/news");
-        const data: NewsResponse = await response.json();
+        const data: NewsResponse | ErrorResponse = await response.json();
+
+        if ("error" in data) {
+          setError(data.error);
+          setErrorDetails(data.details || null);
+          return;
+        }
 
         if (data.status === "ok") {
           setNews(data.articles.slice(0, 6)); // Get only 6 articles
@@ -43,6 +63,9 @@ export default function News() {
       } catch (error) {
         console.error("Error fetching news:", error);
         setError("Error fetching news");
+        setErrorDetails(
+          error instanceof Error ? error.message : "Unknown error"
+        );
       } finally {
         setLoading(false);
       }
@@ -75,8 +98,15 @@ export default function News() {
               Loading news...
             </div>
           ) : error ? (
-            <div className="text-center text-red-600 dark:text-red-400">
-              {error}
+            <div className="text-center text-red-600 dark:text-red-400 max-w-2xl mx-auto">
+              <p className="text-xl font-semibold mb-2">{error}</p>
+              {errorDetails && (
+                <pre className="text-sm mt-2 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg overflow-auto">
+                  {typeof errorDetails === "string"
+                    ? errorDetails
+                    : JSON.stringify(errorDetails, null, 2)}
+                </pre>
+              )}
             </div>
           ) : (
             <section className="w-full max-w-4xl mx-auto">
