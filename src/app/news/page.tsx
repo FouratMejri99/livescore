@@ -33,7 +33,7 @@ export default function News() {
     const fetchNews = async () => {
       try {
         const response = await fetch(
-          "https://newsapi.org/v2/everything?q=football&from=2025-02-21&sortBy=publishedAt&apiKey=b23aaaefb9f143cc985a87dea09f8586"
+          "https://newsapi.org/v2/everything?q=soccer&from=2025-02-21&sortBy=publishedAt&apiKey=b23aaaefb9f143cc985a87dea09f8586"
         );
         const data: NewsResponse = await response.json();
 
