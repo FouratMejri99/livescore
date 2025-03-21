@@ -32,9 +32,7 @@ export default function News() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(
-          "https://newsapi.org/v2/everything?q=soccer&from=2025-02-21&sortBy=publishedAt&apiKey=b23aaaefb9f143cc985a87dea09f8586"
-        );
+        const response = await fetch("/api/news");
         const data: NewsResponse = await response.json();
 
         if (data.status === "ok") {
